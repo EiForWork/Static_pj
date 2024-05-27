@@ -92,6 +92,7 @@ header {
     border-radius: 30px;
     color: whitesmoke;
     font-size: 25px;
+    text-align: center;
 }
 
 .menu-btn {
@@ -134,6 +135,7 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
 .events .row {
@@ -174,7 +176,10 @@ p {
 
 .btn-container {
     display: flex;
-    gap: 10px; 
+    justify-content: center;
+    gap: 10px; /* Adjust the gap between buttons if needed */
+    width: 100%;
+    margin-top: 20px; /* Add some space between the buttons and the content above */
 }
 
 /* tor ra sub puea wai ja */
