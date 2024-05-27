@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Test</title>
+    <link rel="stylesheet" href="./testing.css">
+</head>
+
+<body>
+    <div class="quiz-container" id="quiz-container">
+        <h1>Method of Sections solutions testing</h1>
+        <h4>* ตอบเป็นทศนิยม2ตำแหน่ง</h4>
+        <div id="quiz-content"></div>
+        <div class="button-container">
+            <button id="prev-button" onclick="prevQuestion()">Previous</button>
+            <div id="seq" class="num-container"></div>
+            <button id="next-button" onclick="nextQuestion()">Next</button>
+        </div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const quiz = [
+            {
+                question: "1.จงหาแรงในชิ้นส่วน BC, BE และ EF ของโครงถักรับภาระดังรูป",
+                img: "./img_methodsections/ms_1.jpg",
+                answer: { "BC": 4.12, "BE": 0.901, "EF": 3.38 }
+            },
+            {
+                question: "2.จงหาแรงในชิ้นส่วน CH, CF ของโครงถักรับภาระดังรูป",
+                img: "./img_methodsections/ms_2.jpg",
+                answer: { "CH":101.8 , "CF" :26.8}
+            },
+            {
+                question: "3.โครงถักรับแรงกระทำดังรูป ถักด้วยมุม45° กำหนดให้ชิ้นส่วนขวางตรงส่วนกลางของโครงถักไม่สามารถรับแรงอัดได้ รับได้แต่แรงดึง จงหาแรงในชิ้นส่วน MN และ FN",
+                img: "./img_methodsections/ms_3.jpg",
+                answer: { "FN":48.4,"GN":48.4,"MN":20}
+            },
+            {
+                question: "4.ชิ้นส่วน CJ และ CF ของโครงถักรับภาระดังรูป แต่ชิ้นส่วน BI และ DG ไม่ได้ต่อกัน จงคำนวณหาแรงในชิ้นส่วน BL,CJ,CIและHI",
+                img: "./img_methodsections/ms_4.jpg",
+                answer: { "BC": 3.00, "CJ": 16.22, "CI": 5.00, "HI": 10.50 }
+            },
+            {
+                question: "5.จงหาแรงในชิ้นส่วน JQ ของโครงสร้างถักแบบบัลติมอร์ (baltimore truss) 30° , 60° , 90° และ 120°",
+                img: "./img_methodsections/ms_5.jpg",
+                answer: {  "JQ" : 57.7 }
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = quiz.map(q => ({}));
+
+        function selectpage(index) {
+            storeUserAnswers();
+            fadeOut(() => {
+                currentQuestionIndex = index;
+                displayQuestion(currentQuestionIndex);
+            });
+        }
+
+        function displayQuestion(index) {
+            const quizContent = document.getElementById('quiz-content');
+            const questionObj = quiz[index];
+
+            const inputsHTML = Object.keys(questionObj.answer).map(key => `
+                <div class="quiz-input ${parseFloat(userAnswers[index][key]) === questionObj.answer[key] ? 'correct-sign' : ''}">
+                    <label>${key}: <input type="number" id="${key}" name="${key}" step="0.01" value="${userAnswers[index][key] || ''}" oninput="checkInput('${key}', ${questionObj.answer[key]})"></label>
+                </div>
+            `).join('');
+
+            quizContent.innerHTML = `
+                <div class="quiz-question">
+                    <p>${questionObj.question}</p>
+                    ${questionObj.img ? `<img src="${questionObj.img}" alt="Question Image">` : ''}
+                    <div class="input-grid">${inputsHTML}</div>
+                </div>
+            `;
+
+            const shonum = document.getElementById('seq');
+            shonum.innerHTML = quiz.map((question, i) => `<a class="num" id='SelectNum' onclick="selectpage(${i})">${i + 1}</a>`).join('');
+
+            fadeIn();
+        }
+
+        function checkInput(key, correctValue) {
+            const input = document.getElementById(key);
+            const userValue = parseFloat(input.value);
+
+            if (userValue === correctValue) {
+                input.parentElement.classList.add('correct-sign');
+            } else {
+                input.parentElement.classList.remove('correct-sign');
+            }
+        }
+
+        function storeUserAnswers() {
+            const questionObj = quiz[currentQuestionIndex];
+            Object.keys(questionObj.answer).forEach(key => {
+                const userAnswer = document.getElementById(key).value;
+                userAnswers[currentQuestionIndex][key] = userAnswer;
+                checkInput(key, questionObj.answer[key]);
+            });
+        }
+
+        function checkAnswer() {
+            score = 0;
+            userAnswers.forEach((answers, index) => {
+                const questionObj = quiz[index];
+                let isCorrect = true;
+                Object.keys(questionObj.answer).forEach(key => {
+                    const userAnswer = parseFloat(answers[key]);
+                    if (userAnswer !== questionObj.answer[key]) {
+                        isCorrect = false;
+                    }
+                });
+                if (isCorrect) {
+                    score++;
+                }
+            });
+        }
+
+        function nextQuestion() {
+            storeUserAnswers();
+            if (currentQuestionIndex < quiz.length - 1) {
+                fadeOut(() => {
+                    currentQuestionIndex++;
+                    displayQuestion(currentQuestionIndex);
+                });
+            } else {
+                calculateResult();
+            }
+        }
+
+        function prevQuestion() {
+            storeUserAnswers();
+            if (currentQuestionIndex > 0) {
+                fadeOut(() => {
+                    currentQuestionIndex--;
+                    displayQuestion(currentQuestionIndex);
+                });
+            }
+        }
+
+        function restart() {
+            location.reload();
+        }
+
+        function calculateResult() {
+            checkAnswer();
+            const result = document.getElementById('result');
+            result.innerHTML = `You scored ${score} out of ${quiz.length} <button onclick="restart()"> \t Restart</button>`;
+            // document.getElementById('next-button').style.display = 'none';
+            // document.getElementById('prev-button').style.display = 'none';
+            // document.getElementById('seq').style.display = 'none';
+        }
+
+        function fadeOut(callback) {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.style.opacity = 0;
+            setTimeout(callback, 10);
+        }
+
+        function fadeIn() {
+            const quizContainer = document.getElementById('quiz-container');
+            setTimeout(() => {
+                quizContainer.style.opacity = 1;
+            }, 500);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fadeIn();
+            displayQuestion(currentQuestionIndex);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 130vh;
+    margin: 0;
+    backdrop-filter: blur(2px);
+    background-image: url(./civil.jpg);
+    background-repeat: no-repeat;
+
+}
+
+.quiz-container {
+    max-width: 700px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.quiz-question {
+    margin-bottom: 20px;
+}
+
+.quiz-input {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.quiz-input input {
+    border-radius: 3px;
+    border: 2px solid rgb(0, 0, 0);
+    padding-right: 25px;
+}
+
+.correct-sign::after {
+    content: '✔';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: green;
+    font-size: 18px;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
+}
+
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #414141;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.5s;
+}
+
+button:hover {
+    background-color: #8f8f8f;
+    box-shadow: 0px 0px 10px grey;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    padding-bottom: 20px;
+    border-radius: 10px;
+}
+
+.num-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.num:hover {
+    color: #4CAF50;
+    transition: 0.5s;
+}
+
+.result{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 100%;
+    gap: 20px;
+}
