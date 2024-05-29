@@ -50,7 +50,7 @@ body, html {
 header {
     width: 100vw;
     height: 100vh;
-    background-image: url('/pic/header-bg.png');
+    background-image: url('/learning/pic/header-bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
